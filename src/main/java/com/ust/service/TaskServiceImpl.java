@@ -14,18 +14,18 @@ import com.ust.repository.TaskRepo;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-	
+
 	@Autowired
 	private TaskRepo taskRepo;
 
 	@Override
 	public Task createTask(Task task) throws TaskAlreadyExistException {
-		
+		if ((taskRepo.findById(task.getId()).isPresent())) {
+			throw new TaskAlreadyExistException("Task Already Exists!");
+		}
 
 		return taskRepo.save(task);
 	}
-
-
 
 	@Override
 	public Task getTaskById(Integer task_id) throws TaskNotFoundException {
@@ -34,86 +34,33 @@ public class TaskServiceImpl implements TaskService {
 		}
 		return taskRepo.findById(task_id).get();
 	}
-	
 
-	
-	@Override
-	public Task editTask(Task task)  {
-		return taskRepo.save(task);
+	public Task editTask(Integer task_id, Task task) throws TaskNotFoundException {
+		Optional opt = taskRepo.findById(task_id);
+		if (!(opt.isPresent())) {
+			throw new TaskNotFoundException("Task doesn't exist");
+		}
+		taskRepo.save(task);
+		return taskRepo.findById(task_id).get();
 	}
 
-		
-	
 	@Override
-	public void deleteTask(Integer task_id, Integer role_id) throws InvalidUserException {
-		Task task=null;
-		Optional opt=taskRepo.findById(task_id);
-		if(opt.isEmpty()) {
+	public Task deleteTask(Integer task_id, Integer role_id) throws InvalidUserException {
+		Task task = null;
+		Optional opt = taskRepo.findById(task_id);
+		if (opt.isEmpty()) {
 			throw new InvalidUserException("Invalid User!");
-		}
-		else{
-			task=taskRepo.findById(task_id).get();
+		} else {
+			task = taskRepo.findById(task_id).get();
 			taskRepo.deleteById(task_id);
 		}
+		return null;
 	}
-	
+
 	@Override
 	public List<Task> getAllTasks() {
 		return taskRepo.findAll();
 	}
-	
-	
-}	
 
-/*	@Override
-	public void deleteTask(Integer id) {
-		Task task = this.getTaskById(id);
-		taskRepo.delete(task);
-		
-	}
-	
-	@Override
-	public Task editTask(Task task) {
-		return taskRepo.save(task);
-	}
-	
-	@Override
-	public Optional<Task> deleteTask(Integer id) {
-		return null;
-	}
-	
-*/
-	
-	
-//	public Task editTask(Integer task_id,Integer role_id) throws InvalidUserException {
-//	Task task=taskRepo.findById(task_id).get();
-//	if(task==null) {
-//		throw new InvalidUserException("Invalid User!");
-//	}
-//	else {
-//		return task;
-//	}
-//}	
-	
-//	public void deleteTask(Integer task_id, Integer role_id) {
-//	taskRepo.deleteById(task_id);
-//	
-//}
-	/*	@Override
-	public Task editTask(Integer task_id, Task task ) {
-		
-		taskRepo.save(task);
-		return taskRepo.findById(task_id).get();
-	}
-*/
-	
-	/*		if(taskRepo.findById(task.getId())!=null)
-	{
-		throw new TaskAlreadyExistException("Task Already Exists!");
-	}
-*/	
-	
-//    if(!((taskRepo.findById(task.getId())==null))) {
-//    
-//    throw new TaskAlreadyExistException("Task Already Exists!");
-//} 	
+}
+

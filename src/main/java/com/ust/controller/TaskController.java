@@ -50,9 +50,15 @@ public class TaskController {
 		}
 	}
 
-	@PutMapping("/edit-task")
-	public ResponseEntity<Task> editTask(@RequestBody Task task) throws InvalidUserException {
-		return new ResponseEntity<>(taskService.editTask(task), HttpStatus.OK);
+	
+	@PutMapping("/edit-task/{task_id}")
+	public ResponseEntity<?> editTask(@PathVariable Integer task_id, @RequestBody Task task) {
+		
+		try {
+			return new ResponseEntity<Task>(taskService.editTask(task_id, task), HttpStatus.OK);
+		} catch (TaskNotFoundException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
+		}
 
 	}
 
@@ -71,37 +77,3 @@ public class TaskController {
 
 
 
-//	public ResponseEntity<?> createTask(@RequestBody Task task) throws TaskAlreadyExistException  {
-//	Task createTask = taskService.createTask(task);
-//	if(createTask.equals(null)) {
-//        throw new TaskAlreadyExistException(null);
-//    }
-//	return new ResponseEntity<>(createTask, HttpStatus.CREATED);
-//}
-
-//	public ResponseEntity<Task> getTaskById(@RequestParam Integer task_id) throws TaskNotFoundException {
-//	return new ResponseEntity<>(taskService.getTaskById(task_id), HttpStatus.FOUND);
-//	
-//	
-
-/*
- * @PutMapping("/edit-task") public ResponseEntity<Task> editTask(@RequestParam
- * Integer task_id, Task task ) { return new
- * ResponseEntity<>(taskService.editTask(task_id, task), HttpStatus.OK);
- * 
- * }
- */
-
-//	public ResponseEntity<?> editTask(@RequestParam Integer task_id, Integer role_id ) {
-//	try {
-//	return new ResponseEntity<>(taskService.editTask(task_id , role_id), HttpStatus.OK);
-//	}
-//	catch(InvalidUserException e) {
-//		return new ResponseEntity<String>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
-//	}
-//}
-
-//	public ResponseEntity<String> deleteTask(@RequestParam Integer task_id, Integer role_id) {
-//	taskService.deleteTask(task_id, role_id);
-//	return new ResponseEntity<String>("Successfully Deleted  the Task " + task_id, HttpStatus.OK);
-//}
