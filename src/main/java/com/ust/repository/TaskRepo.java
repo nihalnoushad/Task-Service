@@ -7,7 +7,8 @@ import com.ust.model.Task;
 
 @Repository
 public interface TaskRepo extends JpaRepository<Task, Integer> {
-	
+
+
 	
 	
 	
