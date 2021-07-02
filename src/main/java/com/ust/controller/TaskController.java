@@ -19,8 +19,12 @@ import com.ust.exception.TaskNotFoundException;
 import com.ust.model.Task;
 import com.ust.service.TaskService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RequestMapping("/app/task")
 @RestController
+@Api
 public class TaskController {
 
 	@Autowired
@@ -41,7 +45,6 @@ public class TaskController {
 	}
 
 	@GetMapping("/retrieve-task")
-
 	public ResponseEntity<?> getTaskById(@RequestParam Integer task_id) {
 		try {
 			return new ResponseEntity<>(taskService.getTaskById(task_id), HttpStatus.FOUND);

@@ -49,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
 		Task task = null;
 		Optional opt = taskRepo.findById(task_id);
 		if (opt.isEmpty()) {
-			throw new InvalidUserException("Invalid User!");
+			throw new InvalidUserException("Task not found!");
 		} else {
 			task = taskRepo.findById(task_id).get();
 			taskRepo.deleteById(task_id);
